@@ -104,7 +104,7 @@ namespace CLRCLI.Widgets
         /// <summary>
         /// Stop displaying the UI and handling keyboard input. Can only be used in response to an in-UI event.
         /// </summary>
-        public void Detatch()
+        public void Detach()
         {
             Console.CursorVisible = true;
             Running = false;

@@ -26,7 +26,7 @@ namespace TestHarness
 
         static void button_Clicked(object sender, EventArgs e)
         {
-            (sender as Button).RootWindow.Detatch();
+            (sender as Button).RootWindow.Detach();
         }
     }
 }
