@@ -23,8 +23,8 @@ namespace CLRCLI.Widgets
         {
             Top = 0;
             Left = 0;
-            Width = Console.BufferWidth;
-            Height = Console.BufferHeight;
+            Width = Console.WindowWidth;
+            Height = Console.WindowHeight;
             Background = ConsoleColor.DarkBlue;
             Foreground = ConsoleColor.White;
             SelectedBackground = ConsoleColor.Magenta;
