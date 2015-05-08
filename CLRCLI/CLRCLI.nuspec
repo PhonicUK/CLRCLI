@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>CubeCoders Limited</authors>
+    <licenseUrl>https://github.com/PhonicUK/CLRCLI/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/PhonicUK/CLRCLI</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>An event-driven library for building line-art user interfaces in C#/.Net command-line applications.</description>
+    <copyright>Copyright 2015</copyright>
+    <tags>CommandLine</tags>
+  </metadata>
+</package>

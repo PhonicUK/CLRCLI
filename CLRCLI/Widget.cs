@@ -138,7 +138,7 @@ namespace CLRCLI
         }
 
         [XmlElement(typeof(Border)), XmlElement(typeof(Button)), XmlElement(typeof(Checkbox)),
-        XmlElement(typeof(Dialog)), XmlElement(typeof(HorizontalBarGraph)), XmlElement(typeof(HorizontalLine)),
+        XmlElement(typeof(Dialog)), XmlElement(typeof(HorizontalBarGraph)), XmlElement(typeof(HorizontalLine)), XmlElement(typeof(VerticalLine)),
         XmlElement(typeof(HorizontalProgressBar)), XmlElement(typeof(Label)), XmlElement(typeof(ListBox)),
         XmlElement(typeof(RadioButton)), XmlElement(typeof(SingleLineTextbox)), XmlElement(typeof(SlideToggle)),
         XmlElement(typeof(Spinner)), XmlElement(typeof(TinySpinner))]
@@ -172,6 +172,15 @@ namespace CLRCLI
                      */
                     if (Parent != null) { Draw(); } 
                 }
+            }
+        }
+
+        [XmlIgnore]
+        public bool IsVisible
+        {
+            get
+            {
+                return this.Visible && (Parent == null ? true : Parent.IsVisible);
             }
         }
 
@@ -279,7 +288,7 @@ namespace CLRCLI
         internal void Draw()
         {
             if (RootWindow.AllowDraw == false) { return; }
-            if (Visible)
+            if (Visible && (Parent == null || Parent.Visible))
             {
                 lock (Console.Out)
                 {
@@ -288,12 +297,8 @@ namespace CLRCLI
 
                 if (Children != null)
                 {
-                    Children.ForEach(c => c.Draw());
+                    Children.Where(c => c.Visible).ToList().ForEach(c => c.Draw());
                 }
-            }
-            else
-            {
-                Blank();
             }
         }
 
@@ -304,6 +309,7 @@ namespace CLRCLI
 
         public void Hide()
         {
+            Parent.Render();
             Visible = false;
         }
 
@@ -333,6 +339,22 @@ namespace CLRCLI
             }
 
             return null;
+        }
+
+        public Widget Nearest<T>() where T : Widget
+        {
+            if (this is T) { return this; }
+            if (this.Parent == null) { return null; }
+            return Parent.Nearest<T>();
+        }
+
+        [XmlIgnore]
+        public List<Widget> FocusableChildren
+        {
+            get
+            {
+                return Children.Where(c => c is IFocusable).OrderBy(c => c.TabStop).ToList();
+            }
         }
     }
 }

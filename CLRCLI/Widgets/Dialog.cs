@@ -43,5 +43,11 @@ namespace CLRCLI.Widgets
         {
             ConsoleHelper.DrawText(DisplayLeft + 1, DisplayTop - 1, Background, Foreground, " {0} ", Text);
         }
+
+        public new void Show()
+        {
+            base.Show();
+            this.FocusableChildren.FirstOrDefault().SetFocus();
+        }
     }
 }

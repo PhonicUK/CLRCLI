@@ -13,7 +13,14 @@ namespace CLRCLI.Widgets
     {
         [XmlIgnore]
         public List<Widget> AllChildren;
-        private List<Widget> FocusableChildren;
+        private List<Widget> RootFocusableChildren;
+        private List<Widget> ActivableChildren
+        {
+            get
+            {
+                return RootFocusableChildren.Where(c => c.IsVisible).ToList();
+            }
+        }
 
         [XmlIgnore]
         public Object ViewModel { get; set; }
@@ -119,8 +126,8 @@ namespace CLRCLI.Widgets
             Running = true;
             AllowDraw = true;
             Console.CursorVisible = false;
-            FocusableChildren = AllChildren.Where(c => c is IFocusable).OrderBy(c => c.TabStop).ToList();
-            ActiveWidget = FocusableChildren.FirstOrDefault();
+            RootFocusableChildren = AllChildren.Where(c => c is IFocusable).OrderBy(c => c.TabStop).ToList();
+            ActiveWidget = RootFocusableChildren.FirstOrDefault();
 
             Draw();
 
@@ -186,7 +193,7 @@ namespace CLRCLI.Widgets
             if (w != null)
             {
                 ActiveWidget = w;
-                lastIndex = FocusableChildren.IndexOf(ActiveWidget);
+                lastIndex = RootFocusableChildren.IndexOf(ActiveWidget);
             }
         }
 
@@ -196,7 +203,7 @@ namespace CLRCLI.Widgets
             if (w != null)
             {
                 ActiveWidget = w;
-                lastIndex = FocusableChildren.IndexOf(ActiveWidget);
+                lastIndex = RootFocusableChildren.IndexOf(ActiveWidget);
             }
         }
 
@@ -206,7 +213,7 @@ namespace CLRCLI.Widgets
             if (w != null)
             {
                 ActiveWidget = w;
-                lastIndex = FocusableChildren.IndexOf(ActiveWidget);
+                lastIndex = RootFocusableChildren.IndexOf(ActiveWidget);
             }
         }
 
@@ -216,7 +223,7 @@ namespace CLRCLI.Widgets
             if (w != null)
             {
                 ActiveWidget = w;
-                lastIndex = FocusableChildren.IndexOf(ActiveWidget);
+                lastIndex = RootFocusableChildren.IndexOf(ActiveWidget);
             }
         }
 
@@ -232,15 +239,15 @@ namespace CLRCLI.Widgets
 
         private Widget FindFocusableWidgetToRightOf(Widget from)
         {
-            var ImmediateRight = FocusableChildren.Where(c => c.Top == from.Top && c.Left > from.Left).OrderBy(c => c.Left).FirstOrDefault();
+            var ImmediateRight = ActivableChildren.Where(c => c.Top == from.Top && c.Left > from.Left).OrderBy(c => c.Left).FirstOrDefault();
 
             if (ImmediateRight == null)
             {
-                var RoughRight = FocusableChildren.Where(c => c.Left > from.Left && Math.Abs(c.Top - from.Top) < 2).OrderBy(c => c.Left).OrderBy(c => Math.Abs(c.Top - from.Top)).FirstOrDefault();
+                var RoughRight = ActivableChildren.Where(c => c.Left > from.Left && Math.Abs(c.Top - from.Top) < 2).OrderBy(c => c.Left).OrderBy(c => Math.Abs(c.Top - from.Top)).FirstOrDefault();
 
                 if (RoughRight == null)
                 {
-                    return FocusableChildren.Where(c => c.Top == from.Top).OrderBy(c => c.Left).FirstOrDefault();
+                    return ActivableChildren.Where(c => c.Top == from.Top).OrderBy(c => c.Left).FirstOrDefault();
                 }
 
                 return RoughRight;
@@ -251,15 +258,15 @@ namespace CLRCLI.Widgets
 
         private Widget FindFocusableWidgetToLeftOf(Widget from)
         {
-            var ImmediateLeft = FocusableChildren.Where(c => c.Top == from.Top && c.Left < from.Left).OrderByDescending(c => c.Left).FirstOrDefault();
+            var ImmediateLeft = ActivableChildren.Where(c => c.Top == from.Top && c.Left < from.Left).OrderByDescending(c => c.Left).FirstOrDefault();
 
             if (ImmediateLeft == null)
             {
-                var RoughLeft = FocusableChildren.Where(c => c.Left < from.Left && Math.Abs(c.Top - from.Top) < 2).OrderByDescending(c => c.Left).OrderBy(c => Math.Abs(c.Top - from.Top)).FirstOrDefault();
+                var RoughLeft = ActivableChildren.Where(c => c.Left < from.Left && Math.Abs(c.Top - from.Top) < 2).OrderByDescending(c => c.Left).OrderBy(c => Math.Abs(c.Top - from.Top)).FirstOrDefault();
 
                 if (RoughLeft == null)
                 {
-                    return FocusableChildren.Where(c => c.Top == from.Top).OrderByDescending(c => c.Left).FirstOrDefault();
+                    return ActivableChildren.Where(c => c.Top == from.Top).OrderByDescending(c => c.Left).FirstOrDefault();
                 }
 
                 return RoughLeft;
@@ -270,11 +277,11 @@ namespace CLRCLI.Widgets
 
         private Widget FindFocusableWidgetAbove(Widget from)
         {
-            var ImmediateAbove = FocusableChildren.Where(c => c.Left == from.Left && c.Top < from.Top).OrderByDescending(c => c.Top).FirstOrDefault();
+            var ImmediateAbove = ActivableChildren.Where(c => c.Left == from.Left && c.Top < from.Top).OrderByDescending(c => c.Top).FirstOrDefault();
 
             if (ImmediateAbove == null)
             {
-                return FocusableChildren.Where(c => c.Top < from.Top).OrderByDescending(c => c.Top).OrderBy(c => c.Left).FirstOrDefault();
+                return ActivableChildren.Where(c => c.Top < from.Top).OrderByDescending(c => c.Top).OrderBy(c => c.Left).FirstOrDefault();
             }
 
             return ImmediateAbove;
@@ -282,11 +289,11 @@ namespace CLRCLI.Widgets
 
         private Widget FindFocusableWidgetBelow(Widget from)
         {
-            var ImmediateBelow = FocusableChildren.Where(c => c.Left == from.Left && c.Top > from.Top).OrderBy(c => c.Top).FirstOrDefault();
+            var ImmediateBelow = ActivableChildren.Where(c => c.Left == from.Left && c.Top > from.Top).OrderBy(c => c.Top).FirstOrDefault();
 
             if (ImmediateBelow == null)
             {
-                return FocusableChildren.Where(c => c.Top > from.Top).OrderBy(c => c.Left).OrderBy(c => c.Top).FirstOrDefault();
+                return ActivableChildren.Where(c => c.Top > from.Top).OrderBy(c => c.Left).OrderBy(c => c.Top).FirstOrDefault();
             }
 
             return ImmediateBelow;
@@ -297,13 +304,13 @@ namespace CLRCLI.Widgets
             if (ActiveWidget == null)
             {
                 lastIndex = 0;
-                ActiveWidget = FocusableChildren.FirstOrDefault();
+                ActiveWidget = ActivableChildren.FirstOrDefault();
             }
             else
             {
-                lastIndex = (lastIndex + Direction) % FocusableChildren.Count;
-                if (lastIndex == -1) { lastIndex = FocusableChildren.Count - 1; }
-                ActiveWidget = FocusableChildren[lastIndex];
+                lastIndex = (lastIndex + Direction) % ActivableChildren.Count;
+                if (lastIndex == -1) { lastIndex = ActivableChildren.Count - 1; }
+                ActiveWidget = ActivableChildren[lastIndex];
             }
         }
 
