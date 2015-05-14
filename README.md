@@ -7,6 +7,7 @@ CLRCLI (Common-Language-Runtime Command-Line-Interface) is an event-driven
 windowing system using a line-art interface for use by command-line
 applications.
 
+![example screenshot](https://i.imgur.com/yJjTSdD.png)
 
 Getting Started
 ---------------
