@@ -36,7 +36,7 @@ Currently the following widgets are implemented:
 * Button
 * Label
 * Checkbox
-* Radiobox
+* Radiobox (Automatically toggles sibling radioboxes)
 * Slider (Stylized Checkbox)
 * Horizontal Progress Bar
 * Listbox (with scrolling)
