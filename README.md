@@ -7,6 +7,7 @@ CLRCLI (Common-Language-Runtime Command-Line-Interface) is an event-driven
 windowing system using a line-art interface for use by command-line
 applications.
 
+![example screenshot](https://i.imgur.com/yJjTSdD.png)
 
 Getting Started
 ---------------
@@ -25,6 +26,25 @@ raised by a control or it may not terminate properly.
 
 See the TestHarness app for a short 'Hello World' example.
 
+Supported Widgets
+-----------------
+
+Currently the following widgets are implemented:
+
+* Root Window
+* Dialog
+* Button
+* Label
+* Checkbox
+* Radiobox (Automatically toggles sibling radioboxes)
+* Slider (Stylized Checkbox)
+* Horizontal Progress Bar
+* Listbox (with scrolling)
+* Single-line textbox (with horizontal scroll, and password field support)
+* Horizontal and vertical lines
+* Borders with optional titles
+* Simple horizontal bar graph
+* Spinners (3x3 and 1x1 styles)
 
 Writing new widgets
 -------------------
