@@ -101,9 +101,20 @@ namespace CLRCLI
             {
                 if (value != _Text)
                 {
+                    bool parentRedraw = false;
+                    if (value.Length < _Text.Length)
+                    {
+                        parentRedraw = true;
+                    }
                     _Text = value;
+                    
                     if (TextChanged != null) { TextChanged(this, EventArgs.Empty); }
-                    if (Parent != null) { Draw(); }
+
+                    if (Parent != null) 
+                    {
+                        if (parentRedraw) { Parent.Draw(); }
+                        else { Draw(); }
+                    }
                 }
             }
         }
